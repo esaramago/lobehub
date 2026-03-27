@@ -19,6 +19,8 @@ services:
       - 'AUTH_SECRET=${AUTH_SECRET}'
       - 'DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgresql:5432/${LOBE_DB_NAME}'
       - 'INTERNAL_APP_URL=http://localhost:3210'
+      - 'INTERNAL_APP_URL=${SERVICE_URL_LOBE}'
+      - 'APP_URL=${SERVICE_URL_LOBE}'
       - 'S3_ENDPOINT=${S3_ENDPOINT}'
       - 'S3_BUCKET=${RUSTFS_LOBE_BUCKET}'
       - 'S3_ENABLE_PATH_STYLE=1'
@@ -123,6 +125,8 @@ services:
   searxng:
     image: searxng/searxng
     container_name: lobe-searxng
+    ports:
+      - '8180:8080'
     volumes:
       - './searxng-settings.yml:/etc/searxng/settings.yml'
     environment:
@@ -130,8 +134,6 @@ services:
     restart: always
     networks:
       - lobe-network
-    env_file:
-      - .env
 
 networks:
   lobe-network:
